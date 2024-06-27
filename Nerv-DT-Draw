@@ -4,11 +4,12 @@ import random
 from IPython.display import display, Image, HTML
 from collections import defaultdict
 
-# Updated list of Nerv FC members in the drawing
+# Updated list of Nerv FC members in the drawing.  Two members have
+# increased odds due to being the only two participants early on prior to more signing up
 fc_members = [
     "Shiwo Chrysalis", "Hale Draco", "Albatoss Balong", "Jovian Balong", "Elysia Kharim", 
-    "Luceth Marithine", "Suija Qualli", "Mozeo Oakden", "Maki Moonfire", "Apple Angelbow", 
-    "Deuce Halifax", "Mia Orange", "Rurvyn Reledran", "Sien Clark", "Lina Lapis"
+    "Luceth Marithine", "Luceth Marithine", "Suija Qualli", "Mozeo Oakden", "Maki Moonfire", "Apple Angelbow", 
+    "Deuce Halifax", "Mia Orange", "Mia Orange", "Rurvyn Reledran", "Sien Clark", "Lina Lapis"
 ]
 
 # Function to fetch character profile image and details from FFXIV Lodestone
