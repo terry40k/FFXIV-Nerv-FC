@@ -1,4 +1,4 @@
-## Sample Output of Simulation
+# Sample FC Raffle Sim Output
 
 Enter the winning number (between 1 and 999): 500
 
@@ -31,8 +31,9 @@ Simulation Statistics
 
 Closest FC Members
 +---------------------+
-| Member              | Rolled Number | Difference |
+| Member              | Total Count |
 +---------------------+
-| Shiwo Chrysalis     | 345            | 155        |
+| Shiwo Chrysalis     | 10           |
+| Hale Draco          | 8            |
 ...
 +---------------------+
