@@ -2,7 +2,7 @@
 
 ## Description
 
-- This Python script simulates a raffle among members of the FFXIV FC, Nerv
+- This Python script simulates a raffle among members of the FFXIV FC (Nerv)
 - The simulation runs 100 times, rolling a random number between 1 and 999 for each member in each simulation
 - The member who hits the user-specified winning number wins the raffle
 - Additionally, the script tracks and displays the members who rolled numbers closest to the winning number across all simulations
@@ -15,7 +15,7 @@
 - **Profile Fetching**: Fetches the profile image and details of the winning member from FFXIV Lodestone
 - **Details Display**: Displays the winning member's profile details in a table
 - **Simulation Statistics**: Displays the total number of simulations run
-- **Closest Members**: Tracks and displays members who rolled numbers closest to the winning number
+- **Closest Members**: Tracks and displays members who rolled and total count to the closest of the winning number
 
 ## How It Works
 
@@ -25,11 +25,15 @@
    - For each member, a random number between 1 and 999 is rolled
    - Tracks the member who rolls a number closest to the winning number
    - If a member rolls the exact winning number, their profile image and details are fetched from FFXIV Lodestone and displayed
-- **Statistics Display**: After all simulations, the script displays statistics including the total number of simulations and winners,
-   and a table of members who rolled numbers closest to the winning number.
+- **Statistics Display**: After all simulations, the script displays statistics including the total number of simulations and a winner,
+   as well as a table of members who rolled numbers closest to the winning number.
 
 ## Usage
 
-1. Nothing fancy, just make sure to install the below library:
+- Nothing fancy, just make sure to install the below library:
    ```sh
    pip install requests beautifulsoup4
+- Run it in your notebook:
+   ```sh
+  python dawntrail_raffle_simulation.py
+
