@@ -2,10 +2,10 @@
 
 ## Description
 
-This Python script simulates a raffle among members of the FFXIV FC, Nerv
-The simulation runs 100 times, rolling a random number between 1 and 999 for each member in each simulation
-The member who hits the user-specified winning number wins the raffle
-Additionally, the script tracks and displays the members who rolled numbers closest to the winning number across all simulations
+- This Python script simulates a raffle among members of the FFXIV FC, Nerv
+- The simulation runs 100 times, rolling a random number between 1 and 999 for each member in each simulation
+- The member who hits the user-specified winning number wins the raffle
+- Additionally, the script tracks and displays the members who rolled numbers closest to the winning number across all simulations
 
 ## Features
 
