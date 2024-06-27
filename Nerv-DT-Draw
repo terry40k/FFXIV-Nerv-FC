@@ -1,0 +1,124 @@
+import requests
+from bs4 import BeautifulSoup
+import random
+from IPython.display import display, Image, HTML
+from collections import defaultdict
+
+# Updated list of Nerv FC members in the drawing
+fc_members = [
+    "Shiwo Chrysalis", "Hale Draco", "Albatross Balong", "Jovian Balong", "Elysia Kharim", 
+    "Luceth Marithine", "Suija Qualli", "Mozeo Oakden", "Maki Moonfire", "Apple Angelbow", 
+    "Deuce Halifax", "Mia Orange", "Rurvyn Reledran", "Sien Clark"
+]
+
+# Function to fetch character profile image and details from FFXIV Lodestone
+def get_character_info(name):
+    search_url = f"https://na.finalfantasyxiv.com/lodestone/character/?q={name.replace(' ', '+')}&worldname=Lamia"
+    response = requests.get(search_url)
+    soup = BeautifulSoup(response.content, 'html.parser')
+
+    # Attempt to find the character profile link
+    character_link = soup.find('a', class_='entry__link')
+    if not character_link:
+        print(f"Could not find character profile for {name} on Lamia")
+        return None, None
+
+    character_url = f"https://na.finalfantasyxiv.com{character_link['href']}"
+    response = requests.get(character_url)
+    soup = BeautifulSoup(response.content, 'html.parser')
+
+    # Attempt to find the profile image
+    image_tag = soup.find('div', class_='character__detail__image')
+    if not image_tag:
+        print(f"Could not find profile image for {name}")
+        return None, None
+
+    image_url = image_tag.find('img')['src']
+
+    # Attempt to find additional character details
+    details_tag = soup.find('div', class_='character__profile__data')
+    if details_tag:
+        details = details_tag.get_text(strip=True, separator='\n').split('\n')
+    else:
+        details = ["Details not found."]
+
+    return image_url, details
+
+# Function to create HTML table for character details
+def create_details_table(details):
+    table_html = "<h2>Winning FC Member Details</h2><table><tr><th>Details</th></tr>"
+    for detail in details:
+        table_html += f"<tr><td>{detail}</td></tr>"
+        if "Attributes" in detail:
+            break
+    table_html += "</table>"
+    return table_html
+
+# Function to create HTML table for closest members
+def create_closest_table(closest_members):
+    table_html = "<h2>Closest FC Members</h2><table><tr><th>Member</th><th>Rolled Number</th><th>Difference</th></tr>"
+    for member, roll, diff in closest_members:
+        table_html += f"<tr><td>{member}</td><td>{roll}</td><td>{diff}</td></tr>"
+    table_html += "</table>"
+    return table_html
+
+# Function to display statistics
+def display_statistics(simulation_count, winners):
+    stats_html = "<h2>Simulation Statistics</h2><table><tr><th>Statistic</th><th>Value</th></tr>"
+    stats_html += f"<tr><td>Total Simulations</td><td>{simulation_count}</td></tr>"
+    stats_html += f"<tr><td>Total Winners</td><td>{len(winners)}</td></tr>"
+    stats_html += "</table>"
+    display(HTML(stats_html))
+
+# Function to run the simulations
+def run_simulations():
+    winning_number = int(input("Enter the winning number (between 1 and 999): "))
+    
+    # Validate the input number
+    if winning_number < 1 or winning_number > 999:
+        print("The number must be between 1 and 999.")
+        return
+    
+    simulation_count = 0
+    winners = []
+    closest_members = []
+
+    for i in range(100):
+        simulation_count += 1
+        print(f"\nSimulation {i+1}")
+        closest_roll = None
+        closest_diff = float('inf')
+        closest_member = None
+
+        for fc_member in fc_members:
+            rolled_number = random.randint(1, 999)
+            print(f"{fc_member} rolled: {rolled_number}")
+            diff = abs(rolled_number - winning_number)
+            if diff < closest_diff:
+                closest_diff = diff
+                closest_roll = rolled_number
+                closest_member = fc_member
+
+            if rolled_number == winning_number:
+                image_url, details = get_character_info(fc_member)
+                if image_url:
+                    print(f"\n{fc_member} wins the Dawntrail raffle with the number {winning_number}!\n")
+                    display(Image(url=image_url))
+                    details_table = create_details_table(details)
+                    display(HTML(details_table))
+                    winners.append(fc_member)
+                    display_statistics(simulation_count, winners)
+                    closest_table = create_closest_table(closest_members)
+                    display(HTML(closest_table))
+                    return
+
+        closest_members.append((closest_member, closest_roll, closest_diff))
+        print("No winner in this simulation.")
+    
+    # Display final statistics and closest members
+    display_statistics(simulation_count, winners)
+    closest_table = create_closest_table(closest_members)
+    display(HTML(closest_table))
+
+# Run the simulations
+run_simulations()
