@@ -6,9 +6,9 @@ from collections import defaultdict
 
 # Updated list of Nerv FC members in the drawing
 fc_members = [
-    "Shiwo Chrysalis", "Hale Draco", "Albatross Balong", "Jovian Balong", "Elysia Kharim", 
+    "Shiwo Chrysalis", "Hale Draco", "Albatoss Balong", "Jovian Balong", "Elysia Kharim", 
     "Luceth Marithine", "Suija Qualli", "Mozeo Oakden", "Maki Moonfire", "Apple Angelbow", 
-    "Deuce Halifax", "Mia Orange", "Rurvyn Reledran", "Sien Clark"
+    "Deuce Halifax", "Mia Orange", "Rurvyn Reledran", "Sien Clark", "Lina Lapis"
 ]
 
 # Function to fetch character profile image and details from FFXIV Lodestone
@@ -55,10 +55,10 @@ def create_details_table(details):
     return table_html
 
 # Function to create HTML table for closest members
-def create_closest_table(closest_members):
-    table_html = "<h2>Closest FC Members</h2><table><tr><th>Member</th><th>Rolled Number</th><th>Difference</th></tr>"
-    for member, roll, diff in closest_members:
-        table_html += f"<tr><td>{member}</td><td>{roll}</td><td>{diff}</td></tr>"
+def create_closest_table(closest_counts):
+    table_html = "<h2>Closest FC Members</h2><table><tr><th>Member</th><th>Total Count</th></tr>"
+    for member, count in closest_counts.items():
+        table_html += f"<tr><td>{member}</td><td>{count}</td></tr>"
     table_html += "</table>"
     return table_html
 
@@ -81,12 +81,11 @@ def run_simulations():
     
     simulation_count = 0
     winners = []
-    closest_members = []
+    closest_counts = defaultdict(int)
 
     for i in range(100):
         simulation_count += 1
         print(f"\nSimulation {i+1}")
-        closest_roll = None
         closest_diff = float('inf')
         closest_member = None
 
@@ -94,10 +93,8 @@ def run_simulations():
             rolled_number = random.randint(1, 999)
             print(f"{fc_member} rolled: {rolled_number}")
             diff = abs(rolled_number - winning_number)
-            if diff < closest_diff:
-                closest_diff = diff
-                closest_roll = rolled_number
-                closest_member = fc_member
+            if diff <= 10:
+                closest_counts[fc_member] += 1
 
             if rolled_number == winning_number:
                 image_url, details = get_character_info(fc_member)
@@ -108,16 +105,15 @@ def run_simulations():
                     display(HTML(details_table))
                     winners.append(fc_member)
                     display_statistics(simulation_count, winners)
-                    closest_table = create_closest_table(closest_members)
+                    closest_table = create_closest_table(closest_counts)
                     display(HTML(closest_table))
                     return
 
-        closest_members.append((closest_member, closest_roll, closest_diff))
         print("No winner in this simulation.")
     
     # Display final statistics and closest members
     display_statistics(simulation_count, winners)
-    closest_table = create_closest_table(closest_members)
+    closest_table = create_closest_table(closest_counts)
     display(HTML(closest_table))
 
 # Run the simulations
